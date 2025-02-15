@@ -1,8 +1,8 @@
 # Домашняя работа к семинару 1: основы языка C
 
-https://contest.yandex.ru/contest/66458/enter
+[Задачи](https://contest.yandex.ru/contest/66458/problems/)
 
-Problem RL — рекурсия в цикл (алгоритм Евклида)<br/>
+Problem [RL](https://github.com/aleksgright/c-practice/blob/main/basics/rl.c) — рекурсия в цикл (алгоритм Евклида)<br/>
 Problem [CF](https://github.com/aleksgright/c-practice/blob/main/basics/cf.c) — цепные дроби<br/>
 Problem [EE](https://github.com/aleksgright/c-practice/blob/main/basics/ee.c) — расширенный алгоритм Евклида<br/>
 Problem DE — Диофантовы уравения<br/>
