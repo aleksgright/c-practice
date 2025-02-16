@@ -21,13 +21,9 @@ int sieve_bound(int num)
     return (int) round(dres) + 1;
 }
 
-
-int nth_prime(struct sieve_t *sv, unsigned int n);
 void fill_sieve(struct sieve_t *sv);
 int is_prime(struct sieve_t *sv, unsigned int n);
 
-
-//contest is broken
 int main()
 {
     int n, outp;
@@ -45,12 +41,8 @@ int main()
     assert(s->s);
 
     fill_sieve(s);
-    #if 0
-    for (int i = 2; i < n; ++i)
-      printf("%d %d\n", i, is_prime(s, i));
-      #endif
 
-    outp = nth_prime(s, n);
+    outp = is_prime(s, n);
     printf("%d\n", outp);
 
     free(s->s);
@@ -59,19 +51,7 @@ int main()
 
 int is_prime(struct sieve_t *sv, unsigned int n)
 {
-    return (sv->s[n / 8] >> n % 8) & 1;
-}
-
-int nth_prime(struct sieve_t *sv, unsigned int n)
-{
-  int i, count;
-  count = 0;
-  i = 1;
-  while (count < n) {
-    i++;
-    if (!((sv->s[i / 8] >> (i % 8)) & 1)) count++;
-  }
-  return i;
+    return (sv->s[n / 8] >> n % 8) & 1 ? 0 : 1;
 }
 
 void fill_sieve(struct sieve_t *sv)
@@ -84,7 +64,7 @@ void fill_sieve(struct sieve_t *sv)
     if (!((sv->s[i / 8] >> (i % 8)) & 1))
     {
       j = i * i;
-      while (j < sv->n)
+      while (j < sv->n*8)
       {
         sv->s[j / 8] = sv->s[j / 8] | (1u << (j % 8));
         j += i;
