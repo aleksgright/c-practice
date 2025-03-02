@@ -3,3 +3,6 @@ out/
 .vscode
 tmp.cpp
 !data_structures/hwh/Makefile
+*.sh
+*.ans
+*.dat

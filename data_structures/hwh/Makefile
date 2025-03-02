@@ -1,16 +1,23 @@
-out: 
-	mkdir $@
+.PHONY: all clean build debug
+FOLDER = out
+TARGET = $(FOLDER)/app
+SOURCE = main.c hash_map.c hash_map_tests.c
+CC = gcc
 
-out/app: main.c hash_map.c hash_map_tests.c out
-	gcc -Wall main.c hash_map.c -o $@
+all: build
 
-debug: main.c hash_map.c hash_map_tests.c out
-	gcc -Wall main.c hash_map.c hash_map_tests.c -g -o out/app
+build: $(TARGET)
+
+$(TARGET): $(SOURCE)
+	mkdir $(FOLDER)
+	$(CC) -Wall $(SOURCE) -o $(TARGET)
+
+debug: $(SOURCE)
+	mkdir $(FOLDER)
+	$(CC) -Wall $(SOURCE) -g -o $(TARGET)
 
 check_leaks: debug
-	valgrind --leak-check=full ./out/app
-
-build: out/app
+	valgrind --leak-check=full $(TARGET)
 
 clean:
 	rm -rf out
