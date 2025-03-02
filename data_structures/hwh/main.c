@@ -1,33 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "hash_map.h"
+#include "hash_map_tests.h"
 
-int main() {
-  int res;
-  struct hash_map* map = hash_map_create(100);
 
-  hash_map_insert(map, "aboba", 0);
-  hash_map_insert(map, "abobwf", 32);
-  hash_map_insert(map, "abobs", 2);
+int main(int argc, char** argv) {
+  if (argc > 1) {
+    if (strcmp(argv[1], "--tests")==0) {
+      run_tests();
+    }
+  }
 
   
-  res = hash_map_size(map);
-  printf("size = %d\n", res);
-
-  res = hash_map_find(map, "aboba");
-  printf("%d\n", res);
-
-  res = hash_map_get(map, "abobwf");
-  printf("%d\n", res);
-
-  res = hash_map_remove(map, "abobwf");
-  printf("%d\n", res);
-
-  res = hash_map_find(map, "abobwf");
-  printf("%d\n", res);
-
-  hash_map_free(map);
-
   return 0;
 }

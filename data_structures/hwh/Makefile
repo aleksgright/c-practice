@@ -1,11 +1,11 @@
 out: 
-	mkdir out
+	mkdir $@
 
-out/app: main.c hash_map.c out
-	gcc -Wall main.c hash_map.c -o out/app
+out/app: main.c hash_map.c hash_map_tests.c out
+	gcc -Wall main.c hash_map.c -o $@
 
-debug: main.c hash_map.c out
-	gcc -Wall main.c hash_map.c -g -o out/app
+debug: main.c hash_map.c hash_map_tests.c out
+	gcc -Wall main.c hash_map.c hash_map_tests.c -g -o out/app
 
 check_leaks: debug
 	valgrind --leak-check=full ./out/app

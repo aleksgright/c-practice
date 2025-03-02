@@ -22,8 +22,14 @@ static void free_node(struct node* node) {
 
 static struct node* create_node(const char *key, int value) {
   struct node* ret = malloc(sizeof(struct node));
-  ret->key = malloc(strlen(key) * sizeof(char));
   if (ret == NULL) {
+    printf("error creating node");
+    return NULL;
+  }
+  ret->next = NULL;
+  ret->key = malloc((strlen(key)+1) * sizeof(char));
+  if (ret->key == NULL) {
+    free(ret);
     printf("error creating node");
     return NULL;
   }
@@ -34,11 +40,17 @@ static struct node* create_node(const char *key, int value) {
 
 struct hash_map* hash_map_create(int size) {
   struct hash_map* ret = malloc(sizeof(struct hash_map));
-  ret->array = malloc(size * sizeof(struct node*));
-  memset(ret->array, 0, size * sizeof(struct node*));
-  if (ret == NULL || ret->array == NULL) {
+  if (ret == NULL) {
     printf("Error creating hash_map, malloc returned NULL");
+    abort();
   }
+  ret->array = malloc(size * sizeof(struct node*));
+  if (ret->array == NULL) {
+    free(ret);
+    printf("Error creating hash_map, malloc returned NULL");
+    abort();
+  }
+  memset(ret->array, 0, size * sizeof(struct node*));
   ret->len = size;
   return ret;
 }
@@ -47,6 +59,10 @@ struct hash_map* hash_map_create(int size) {
 void hash_map_insert(struct hash_map* map, const char* key, int value){
   int hash;
   struct node *ptr;
+  if(map == NULL) {
+    printf("NULL pointer exeption");
+    abort();
+  }
   hash = get_hash(key);
   if (hash>=map->len) {
     printf("error inserting key");
@@ -67,18 +83,18 @@ void hash_map_insert(struct hash_map* map, const char* key, int value){
 int hash_map_find(const struct hash_map* map, const char* key) {
   int hash;
   struct node *ptr;
+  if(map == NULL || map->array == NULL) {
+    printf("NULL pointer exeption");
+    abort();
+  }
   hash = get_hash(key);
-  if (map->array[hash] == NULL) {
-    return 0;
-  } else {
-    ptr = map->array[hash];
-    while (ptr)
-    {
-      if (strcmp(key, ptr->key) == 0) {
-        return 1;
-      }
-      ptr = ptr->next;
+  ptr = map->array[hash];
+  while (ptr)
+  {
+    if (strcmp(key, ptr->key) == 0) {
+      return 1;
     }
+    ptr = ptr->next;
   }
   return 0;
 }
@@ -86,6 +102,10 @@ int hash_map_find(const struct hash_map* map, const char* key) {
 int hash_map_get(const struct hash_map* map, const char* key){
   int hash;
   struct node *ptr;
+  if(map == NULL) {
+    printf("NULL pointer exeption");
+    abort();
+  }
   hash = get_hash(key);
   if (!hash_map_find(map, key)) {
     printf("error getting value from hash_map: no element with such key found");
@@ -104,14 +124,33 @@ int hash_map_get(const struct hash_map* map, const char* key){
 }
 
 int hash_map_update(struct hash_map* map, const char* key, int value){ 
-  return 1;
+  int hash;
+  struct node *ptr;
+  if(map == NULL) {
+    printf("NULL pointer exeption");
+    abort();
+  }
+  hash = get_hash(key);
+  if (!hash_map_find(map, key)) return 0;
+  ptr = map->array[hash];
+  while (ptr) {
+    if (strcmp(key, ptr->key)==0) {
+      ptr->value = value;
+      return 1;
+    }
+    ptr = ptr->next;
+  }
+  return 0;
 }
 
 int hash_map_remove(struct hash_map* map, const char* key){
   int hash;
   struct node *ptr, *tmp;
+  if(map == NULL) {
+    printf("NULL pointer exeption");
+    abort();
+  }
   hash = get_hash(key);
-  //if (!hash_map_find(map, key)) return 0;
   ptr = map->array[hash];
   if (strcmp(key, ptr->key)==0) {
     tmp = ptr;
@@ -120,7 +159,7 @@ int hash_map_remove(struct hash_map* map, const char* key){
     return 1;
   }
   while (ptr->next) {
-    if (strcmp(key, ptr->next->key)) {
+    if (strcmp(key, ptr->next->key)==0) {
       tmp = ptr->next;
       ptr->next = ptr->next->next;
       free_node(tmp);
@@ -134,6 +173,10 @@ int hash_map_remove(struct hash_map* map, const char* key){
 void hash_map_free(struct hash_map* map) {
   int i;
   struct node *ptr, *tmp;
+  if(map == NULL) {
+    printf("NULL pointer exeption");
+    abort();
+  }
   for(i=0; i<map->len; i++) {
     ptr = map->array[i];
     while (ptr) {
