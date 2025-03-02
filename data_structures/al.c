@@ -1,5 +1,3 @@
-// This file contains most of the fuctions, which do not need main to pass tests
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
